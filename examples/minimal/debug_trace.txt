@@ -1,0 +1,10 @@
+      0: system.cpu.tickEvent: EventFunctionWrapped 1 scheduled @ 500
+    500: system.cpu.tickEvent: EventFunctionWrapped 1 executed @ 500
+    500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
+    500: system.cpu.dcache.cpu_side_port: Port is blocking new requests
+    500: system.cpu.tickEvent: EventFunctionWrapped 1 scheduled @ 1000
+   1000: system.cpu.tickEvent: EventFunctionWrapped 1 executed @ 1000
+   1000: system.cpu.decode: [tid:0] Processing instruction [sn:1]
+   1000: system.cpu.dcache.cpu_side_port: Port is accepting new requests
+   1001: system.cpu.dcache.cpu_side_port: Port is sending retry
+   1500: system.cpu.decode: [tid:0] Done unblocking.

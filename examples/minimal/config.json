@@ -1,0 +1,14 @@
+{
+  "path": "root", "type": "Root",
+  "system": {
+    "path": "system", "type": "System",
+    "cpu": {
+      "path": "system.cpu", "type": "BaseO3CPU",
+      "dcache_port": {"role": "GEM5 REQUESTOR", "is_source": "True", "peer": "system.cpu.dcache.cpu_side"},
+      "dcache": {
+        "path": "system.cpu.dcache", "type": "Cache",
+        "cpu_side": {"role": "GEM5 RESPONDER", "is_source": "False", "peer": "system.cpu.dcache_port"}
+      }
+    }
+  }
+}
