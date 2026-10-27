@@ -65,6 +65,8 @@ The dataset contains indexed SQLite records, a manifest with source hashes, and 
 
 ## Using the viewer
 
+The topology uses UML deployment-inspired notation: cuboid nodes for simulation models, component symbols for CPU submodules, and boundary squares for connected ports. Solid arrows retain the configured requestor → responder direction; dashed links identify an expanded CPU view. These symbols describe simulated objects, not deployment of the viewer software. Port squares are connection endpoints; select the edge to inspect its source port.
+
 Select a CPU in the topology toolbar and click **Expand CPU**, or use the **+** on its node. Its submodules appear in a contained group below the system graph. Click a submodule to inspect its evidence and configuration. **Collapse CPU** (or the node's **−**) folds the group back into the CPU node. Each CPU can be expanded independently, and expansion is preserved while stepping or playing through ticks.
 
 Submodules are discovered from configuration and trace paths; stages absent from both are not invented. The group shows the first available component on each hierarchy branch; deeper components remain accessible in the hierarchy. Cards distinguish explicit recorded state, current-tick activity, and unknown current state. Dotted containment links and card placement do not imply pipeline dataflow. CPU-attached cache nodes already present in the port topology remain visible there.
@@ -118,3 +120,13 @@ Same-tick text order is deterministic display ordering, not queue priority or a 
 - [Synthetic example](examples/minimal/README.md)
 
 This is an independent tool, not an official gem5 project.
+
+### Longer demo playback test
+
+With the synthetic demo and an isolated Chrome debugging session running, use:
+
+```sh
+VIEWER_URL=http://127.0.0.1:8766 CDP_URL=http://127.0.0.1:9231 SOAK_SECONDS=120 node tests/browser_soak.mjs artifacts/soak.png
+```
+
+The test repeatedly plays the short demo to its end, expands/collapses the CPU, checks Decode state at recorded and unrecorded ticks, and reloads the timeline. Increase `SOAK_SECONDS` for a longer run. It saves results to `artifacts/soak-results.json` and a screenshot to the supplied path. DOM counts and browser heap samples are diagnostic observations, not a proof of leak-free operation. This repeats the bundled capture; it does not run a new gem5 simulation.
