@@ -20,6 +20,20 @@ for(let i=0;i<30&&!await evaluate('window.viewerReady===true');i++)await new Pro
 if(!await evaluate('window.viewerReady===true'))throw Error(await evaluate('document.body.innerText'));
 console.log(await evaluate(`(async()=>{
  await seek('500'); choose('system.cpu.decode');
+ document.querySelector('#cpuToggle').click();
+ if(!document.querySelector('[data-cpu-module="system.cpu.decode"]'))throw Error('CPU expansion missing Decode');
+ if(!document.querySelector('[data-module-status="system.cpu.decode"]').textContent.includes('empty input'))throw Error('CPU status missing');
+ document.querySelector('[data-cpu-module="system.cpu.decode"]').dispatchEvent(new MouseEvent('click',{bubbles:true}));
+ if(selected!=='system.cpu.decode')throw Error('CPU submodule selection failed');
+ await seek('1000');
+ if(!document.querySelector('[data-module-status="system.cpu.decode"]').textContent.includes('processing'))throw Error('Expanded CPU status did not update');
+ await seek('1001');
+ if(!document.querySelector('[data-module-status="system.cpu.decode"]').textContent.includes('unknown'))throw Error('Stale CPU activity carried forward');
+ document.querySelector('#cpuToggle').click();
+ if(document.querySelector('[data-cpu-group]'))throw Error('CPU did not collapse');
+ document.querySelector('#cpuToggle').click();
+ await seek('500');
+
  if(!document.querySelector('#details').innerText.includes('empty input'))throw Error('Decode bubble absent');
  await seek('1000'); if(!document.querySelector('#details').innerText.includes('processing'))throw Error('Decode resume absent');
  await seek('1001'); if(!document.querySelector('#details').innerText.includes('Current activity unknown'))throw Error('Unobserved tick incorrectly shown active');

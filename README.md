@@ -7,6 +7,7 @@ A local visual log analyzer for gem5 models, ports, and Events. Inspect recorded
 ## Features
 
 - Searchable SimObject hierarchy, configured ports, and discovered runtime components.
+- Expand/collapse CPUs to inspect discovered submodules and their tick-specific observations or recorded state.
 - Interactive Graphviz topology with recorded activity, cache-port blocking, and retry highlights.
 - Exact unsigned 64-bit tick navigation, playback, and stepping through records within a tick.
 - Observed pending events with schedule, reschedule, cancellation, and execution history.
@@ -64,6 +65,10 @@ The dataset contains indexed SQLite records, a manifest with source hashes, and 
 
 ## Using the viewer
 
+Select a CPU in the topology toolbar and click **Expand CPU**, or use the **+** on its node. Its submodules appear in a contained group below the system graph. Click a submodule to inspect its evidence and configuration. **Collapse CPU** (or the node's **−**) folds the group back into the CPU node. Each CPU can be expanded independently, and expansion is preserved while stepping or playing through ticks.
+
+Submodules are discovered from configuration and trace paths; stages absent from both are not invented. The group shows the first available component on each hierarchy branch; deeper components remain accessible in the hierarchy. Cards distinguish explicit recorded state, current-tick activity, and unknown current state. Dotted containment links and card placement do not imply pipeline dataflow. CPU-attached cache nodes already present in the port topology remain visible there.
+
 1. Select a component in the hierarchy or click a graph node/edge.
 2. Enter an exact tick or move between recorded ticks. Use **Records within ticks** to inspect same-timestamp ordering.
 3. Inspect pending events, the component's latest evidence, and recorded state fields.
@@ -81,6 +86,7 @@ The tick panel displays up to 1,000 records and reports truncation. Search resul
 ```bash
 python3 -m unittest discover -s tests -v
 node --check dist/app.js
+node tests/test_cpu_modules.cjs
 ```
 
 Tests cover same-tick ordering, event cancellation/rescheduling, partial captures, padded ticks, unsigned 64-bit values, vector ports, explicit state deltas, native cache-port messages, and crossbar busy intervals.
